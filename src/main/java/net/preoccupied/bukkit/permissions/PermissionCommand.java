@@ -15,6 +15,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
+import net.preoccupied.bukkit.CommandUtils;
+import net.preoccupied.bukkit.permissions.PermissionCheck;
+
 
 
 public abstract class PermissionCommand implements CommandExecutor {
@@ -24,6 +27,7 @@ public abstract class PermissionCommand implements CommandExecutor {
     private PluginCommand command = null;
     
     private String permission = null;
+    private PermissionCheck permcheck = null;
 
 
     public PermissionCommand(PluginCommand com) {
@@ -52,19 +56,57 @@ public abstract class PermissionCommand implements CommandExecutor {
     }
 
 
+
+    public boolean permissionCheck(Player player) {
+	if(permission == null) return true;
+
+	if(permcheck == null) {
+	    permcheck = PermissionCheck.forNode(permission);
+	}
+
+	return permcheck.check(player);
+    }
+
+
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 	if(! (sender instanceof Player))
 	    return false;
 
-    	PermissionCommandForm form = findCommandForm(args.length);
-	if(form == null) {
-	    return false;
+	Player player = (Player) sender;
 
+	if(! permissionCheck(player)) {
+	    return true;
 	} else {
-	    return form.invoke(this, (Player) sender, args);
+	    return runUnquoted(player, args);
 	}
     }
 
+
+    /** Override this if you want permission checking but don't want
+	command quote parsing to happen */
+    public boolean runUnquoted(Player player, String[] args) {
+	return run(player, CommandUtils.processQuotes(args));
+    }
+    
+    
+    /** Override this if you want permission checking and quote
+	parsing, but want to be able to deal with a variable number of
+	arguments */
+    public boolean run(Player player, String[] args) {
+    	PermissionCommandForm form = findCommandForm(args.length);
+	return (form != null && form.invoke(this, player, args));
+    }
+
+
+    /* originally wrote this intending to find methods that existed
+       only on the anonymous inner class, but then I discovered that I
+       couldn't call those via reflection. I could probably tear all
+       of the reflection code out and just switch which method to call
+       by the argument count. Really disappointed with that, since we
+       are now limited in how many arguments we can take by how many
+       private run methods I put in this class. */
+    
 
     private PermissionCommandForm findCommandForm(int count) {
 	PermissionCommandForm pcf = forms.get(count);
@@ -96,6 +138,9 @@ public abstract class PermissionCommand implements CommandExecutor {
 	return m;
     }
 
+
+    /* these get overridden with public versions when anonymous
+       subclasses of PermissionCommand are created */
 
     public boolean run(Player p) { return false; }
     public boolean run(Player p, String a) { return false; }
