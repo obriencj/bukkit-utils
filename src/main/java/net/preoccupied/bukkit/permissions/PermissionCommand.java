@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import net.preoccupied.bukkit.CommandUtils;
 import net.preoccupied.bukkit.PlayerCommand;
@@ -33,6 +34,12 @@ public abstract class PermissionCommand extends PlayerCommand {
 	m = (Map) m.get(com.getName());
 
 	this.permission = (String) m.get("permission");
+    }
+
+
+
+    public PermissionCommand(JavaPlugin plugin, String name) {
+	super(plugin, name);
     }
 
 
