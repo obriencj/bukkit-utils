@@ -29,6 +29,26 @@ public abstract class PlayerCommand implements CommandExecutor {
 
 
 
+    public int parseInt(String m, int default_val) {
+	return parseInt(null, m, default_val);
+    }
+
+
+
+    public int parseInt(Player p, String m, int default_val) {
+	int i = default_val;
+	try {
+	    i = Integer.parseInt(m);
+	} catch(Exception e) {
+	    if(p != null) {
+		msg(p, "Invalid number format (defaulting to " + default_val + "): " + m);
+	    }
+	}
+	return i;
+    }
+
+
+
     public void msg(Player p, String m) {
 	if(p != null) p.sendMessage(m);
     }
