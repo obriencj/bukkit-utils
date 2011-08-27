@@ -1,0 +1,17 @@
+This is not a Bukkit plugin! Do not place this in the plugins folder for your server.
+
+This project produced a jar which is a library to be loaded into the classpath when you
+launch your server. It contains some utility classes that are depended upon by all of the
+other Preoccupied bukkit plugins.
+
+As an example of how to use this library, my setup keeps this, the rhino javascript lib,
+and the craftbukkit server jar in a "lib/" directory. When I launch my server, I
+construct a classpath from the files in the lib/ dir, and call the appropriate craftbukkit
+class by name.
+
+simplified example:
+
+java \
+  -classpath lib/bukkit-utils-0.0.1-SNAPSHOT.jar:lib/craftbukkit-0.0.1-SNAPSHOT.jar:lib/js.jar \
+  org.bukkit.craftbukkit.Main \
+  nogui
