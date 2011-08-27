@@ -11,9 +11,7 @@ class by name.
 
 simplified example:
 
-```sh
-java -classpath \
-  lib/bukkit-utils-0.0.1-SNAPSHOT.jar:lib/craftbukkit-0.0.1-SNAPSHOT.jar:lib/js.jar \
+java \
+  -classpath lib/bukkit-utils-0.0.1-SNAPSHOT.jar:lib/craftbukkit-0.0.1-SNAPSHOT.jar:lib/js.jar \
   org.bukkit.craftbukkit.Main \
   nogui
-```
