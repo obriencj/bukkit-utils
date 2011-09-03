@@ -29,13 +29,13 @@ public abstract class PlayerCommand implements CommandExecutor {
 
 
 
-    public int parseInt(String m, int default_val) {
+    public static int parseInt(String m, int default_val) {
 	return parseInt(null, m, default_val);
     }
 
 
 
-    public int parseInt(Player p, String m, int default_val) {
+    public static int parseInt(Player p, String m, int default_val) {
 	int i = default_val;
 	try {
 	    i = Integer.parseInt(m);
@@ -48,14 +48,20 @@ public abstract class PlayerCommand implements CommandExecutor {
     }
 
 
+    
+    public static String safestr(Object o) {
+	return (o == null)? "[null]": o.toString();
+    }
 
-    public void msg(Player p, String m) {
+
+
+    public static void msg(Player p, String m) {
 	if(p != null) p.sendMessage(m);
     }
 
 
 
-    public void err(Player p, String m) {
+    public static void err(Player p, String m) {
 	if(p != null) p.sendMessage("$4" + m + "$f");
     }
 
