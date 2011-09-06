@@ -16,6 +16,7 @@ import net.preoccupied.bukkit.permissions.PermissionCheck;
 
 
 
+@Deprecated
 public abstract class PermissionCommand extends PlayerCommand {
 
     

@@ -1,5 +1,6 @@
 package net.preoccupied.bukkit;
 
+import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,19 +13,31 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class PlayerCommand implements CommandExecutor {
 
+
     private PluginCommand command = null;
+    private Logger logger = null;
 
 
 
     public PlayerCommand(PluginCommand com) {
 	this.command = com;
-	command.setExecutor(this);
+	com.setExecutor(this);
+	this.logger = com.getPlugin().getServer().getLogger();
     }
 
 
 
     public PlayerCommand(JavaPlugin plugin, String name) {
-	this(plugin.getCommand(name));
+	this.logger = plugin.getServer().getLogger();
+
+	PluginCommand com = plugin.getCommand(name);
+	if(com == null) {
+	    warning(plugin, "attempted to create a PlayerCommand for ",
+		    name, "which is not defined in plugin.yml");
+	} else {
+	    com.setExecutor(this);
+	    this.command = com;
+	}
     }
 
 
@@ -56,13 +69,79 @@ public abstract class PlayerCommand implements CommandExecutor {
 
 
     public static void msg(Player p, String m) {
-	if(p != null) p.sendMessage(m);
+	if(p != null) p.sendMessage("$b" + m + "$f");
+    }
+
+
+
+    public static void msg(Player p, Object... obs) {
+	if(p == null) return;
+	StringBuilder sb = new StringBuilder("$b");
+	for(Object o : obs) {
+	    sb.append(safestr(o));
+	    sb.append(" ");
+	}
+	sb.append("$f");
+	p.sendMessage(sb.toString());
     }
 
 
 
     public static void err(Player p, String m) {
 	if(p != null) p.sendMessage("$4" + m + "$f");
+    }
+
+
+
+    public static void err(Player p, Object... obs) {
+	if(p == null) return;
+	StringBuilder sb = new StringBuilder("$4");
+	for(Object o : obs) {
+	    sb.append(safestr(o));
+	    sb.append(" ");
+	}
+	sb.append("$f");
+	p.sendMessage(sb.toString());
+    }
+
+
+
+    public void info(String msg) {
+	if(logger != null) logger.info(msg);
+    }
+
+
+
+    public void info(Object... obs) {
+	if(logger == null) return;
+
+	StringBuilder sb = new StringBuilder();
+	for(Object o : obs) {
+	    sb.append(safestr(o));
+	    sb.append(" ");
+	}
+
+	logger.info(sb.toString());
+    }
+
+
+
+    public void warning(String msg) {
+	if(logger != null) logger.warning(msg);
+    }
+
+
+
+    public void warning(Object... obs) {
+	if(logger == null) return;
+
+	StringBuilder sb = new StringBuilder();
+	for(Object o : obs) {
+	    sb.append(safestr(o));
+	    sb.append(" ");
+	}
+
+	logger.warning(sb.toString());
     }
 
 

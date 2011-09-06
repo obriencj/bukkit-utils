@@ -10,9 +10,10 @@ import org.bukkit.entity.Player;
 /**
    An object acting as a reusable permissions check.
 
-   Currently acts the same as calling Permissions.has, but will one
-   day hopefully optimize a lot of the String unpacking, etc away.
+   Currently acts the same as calling Player.hasPermission, but will
+   one day hopefully optimize a lot of the String unpacking, etc away.
  */
+@Deprecated
 public class PermissionCheck {
 
     private final String node;
