@@ -73,55 +73,6 @@ public class CommandUtils {
     }
 
 
-
-    /**
-       An extremely rudimentary processor for argument strings to
-       convert quoted text into a single argument. Has the side effect
-       of normalizing whitespace within the quotes.
-     */
-    public static List<String> processQuotes(List<String> args) {
-	List<String> out = new ArrayList<String>(args.size());
-	StringBuilder concat = null;
-
-	for(String tmp : args) {
-	    int tl = tmp.length();
-	    if(tl == 0) continue;
-		
-	    if(concat != null) {
-		if(tmp.charAt(tl - 1) == '"') {
-		    concat.append(" ");
-		    concat.append(tmp.substring(0, tl - 1));
-		    out.add(concat.toString());
-		    concat = null;
-		} else {
-		    concat.append(" ");
-		    concat.append(tmp);
-		}
-
-	    } else {
-		if(tmp.charAt(0) == '"') {
-		    concat = new StringBuilder(tmp.substring(1));
-		} else {
-		    out.add(tmp);
-		}
-	    }
-	}
-
-	if(concat != null) {
-	    out.add(concat.toString());
-	    concat = null;
-	}
-
-	return out;
-    }
-
-
-
-    public static String[] processQuotes(String[] args) {
-	return (String[]) processQuotes(Arrays.asList(args)).toArray(new String[0]);
-    }
-
-
 }
 
 
