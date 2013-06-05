@@ -11,7 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.EventExecutor;
@@ -37,6 +37,7 @@ public class TeleportQueue {
 
     public void enable() {
 	PluginManager pm = plugin.getServer().getPluginManager();
+	Listener junk = new Listener() { };
 
 	EventExecutor ee = new EventExecutor() {
 		public void execute(Listener ignored, Event e) {
@@ -44,7 +45,7 @@ public class TeleportQueue {
 		}
 	    };
 
-	pm.registerEvent(Event.Type.CHUNK_LOAD, null, ee, Priority.Low, plugin);
+	pm.registerEvent(ChunkLoadEvent.class, junk, EventPriority.LOW, ee, plugin, false);
     }
 
 
